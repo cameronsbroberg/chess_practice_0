@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -7,9 +10,36 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessBoard {
-
+    private ChessPiece[][] squares = new ChessPiece[8][8];
     public ChessBoard() {
         
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessBoard that = (ChessBoard) o;
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j <8; j++){
+                if((squares[i][j] == null) && (that.squares[i][j] == null)){
+                    continue;
+                }
+                if((squares[i][j] == null) ^ (that.squares[i][j] == null)){
+                    return false;
+                }
+                if (!squares[i][j].equals(that.squares[i][j])){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(squares);
     }
 
     /**
@@ -19,7 +49,9 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        int row = position.getRow();
+        int col = position.getColumn();
+        squares[row - 1][col - 1] = piece;
     }
 
     /**
@@ -30,7 +62,9 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        int row = position.getRow();
+        int col = position.getColumn();
+        return squares[row - 1][col - 1];
     }
 
     /**
@@ -38,6 +72,10 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                squares[i][j] = null;
+            }
+        }
     }
 }

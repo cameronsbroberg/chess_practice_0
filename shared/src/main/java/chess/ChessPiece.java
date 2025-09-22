@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -9,8 +10,25 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
-
+    private PieceType pieceType;
+    private final ChessGame.TeamColor color;
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        this.pieceType = type;
+        this.color = pieceColor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessPiece that = (ChessPiece) o;
+        return pieceType.equals(that.pieceType) && color.equals(that.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceType, color);
     }
 
     /**
@@ -29,14 +47,14 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        throw new RuntimeException("Not implemented");
+        return this.color;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        throw new RuntimeException("Not implemented");
+        return this.pieceType;
     }
 
     /**
@@ -47,6 +65,23 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        switch(pieceType){
+            case KING:
+                break;
+            case QUEEN:
+                Collection<ChessMove> diagonals = new BishopMoveGenerator(myPosition,this,board).getMoves();
+                Collection<ChessMove> slides = new RookMoveGenerator(myPosition,this,board).getMoves();
+                diagonals.addAll(slides);
+                return diagonals;
+            case BISHOP:
+                return new BishopMoveGenerator(myPosition,this,board).getMoves();
+            case KNIGHT:
+                break;
+            case ROOK:
+                return new RookMoveGenerator(myPosition,this,board).getMoves();
+            case PAWN:
+                break;
+        }
+    return null;
     }
 }
