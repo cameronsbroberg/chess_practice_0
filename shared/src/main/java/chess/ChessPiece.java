@@ -67,7 +67,7 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         switch(pieceType){
             case KING:
-                break;
+                return new KingMoveGenerator(myPosition,this,board).getMoves();
             case QUEEN:
                 Collection<ChessMove> diagonals = new BishopMoveGenerator(myPosition,this,board).getMoves();
                 Collection<ChessMove> slides = new RookMoveGenerator(myPosition,this,board).getMoves();
@@ -76,11 +76,11 @@ public class ChessPiece {
             case BISHOP:
                 return new BishopMoveGenerator(myPosition,this,board).getMoves();
             case KNIGHT:
-                break;
+                return new KnightMoveGenerator(myPosition,this,board).getMoves();
             case ROOK:
                 return new RookMoveGenerator(myPosition,this,board).getMoves();
             case PAWN:
-                break;
+                return new PawnMoveGenerator(myPosition,this,board).getMoves();
         }
     return null;
     }
